@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/lists.css">
+    <!-- Selet2 Plugin -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <title>Politiker Lists</title>
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light"> 
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2">
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link active">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav>
+
+    <% if(flashMsg.length > 0){ %>
+      <div id="flash-msg" style="text-align: center" class="alert alert-<%= flashType %>">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flashMsg %>
+      </div>
+    <% } %>
+
+     <!-- Loader -->
+     <div class="loader">
+        <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+    </div>
+
+    <!-- list form -->
+    <div class="form-container">
+        <div class="list-div">
+            <div class="list-sub-div">
+                <div class="list-info-show" id="listInfoArea">
+                    <h2 id="list-title">Title: <%= list.title %></h2>
+                    <h3>Description:</h3>
+                    <p class="list-info-show-sub-1"><%= list.description %></p>
+                    <h2>By: <%= list.creator %></h2>
+                </div>
+                </br>
+                <h3 id="filters-title">Filters:</h3>
+                <div class="list-filters" id="addFiltersArea">
+                </div>
+                <div class="button-container">
+                    <form id="delete-list-form" action="/Politiker/lists/<%= list._id %>?_method=DELETE" method="POST">
+                        <button type="button" name="delete" id="delete-list-btn" class="btn btn-danger right-button" onclick="confirmListDelete()">Delete List</button>
+                    </form>
+                    <label id="save-list-btn" class="btn btn-success right-button" tabindex="0" listId="<%= list._id %>">Save List</label>
+                    <button type="button" id="filter-list-btn" class="btn btn-primary right-button" data-target="#myModal" data-toggle="modal">Add Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="list-search-div" class="list-form" action="/Politiker/lists/<%= list._id %>?_method=PUT" method="POST">
+        <input type="text" id="list-search" placeholder="Search ...">
+        <div id="edit-div">
+            <div>
+                <input type="radio" id="edit-icon" value="edit-icon" name="edit-select" onclick="toggleDropdown('edit-dropdown-content')"/>
+                <label for="edit-icon"><span id="edit-span"><i class="material-icons">create</i><span class="icon-text">Edit</span></label>
+                <ul id="edit-dropdown-content" class="dropdown">
+                    <input type="radio" id="edit-choice-text" value="text" name="edit-type"/>
+                    <label for="edit-choice-text">Text</label>
+                    <input type="radio" id="edit-choice-higlight" value="highlight" name="edit-type" onclick="toggleDropdown('highlight-dropdown-content')"/>
+                    <label for="edit-choice-higlight">Highlight</label>
+                    <ul id="highlight-dropdown-content">
+                        <input type="radio" id="dd-choice-red" value="red" name="highlight-color"/>
+                        <label for="dd-choice-red">Red</label>
+                        <input type="radio" id="dd-choice-orange" value="orange" name="highlight-color"/>
+                        <label for="dd-choice-orange">Orange</label>
+                        <input type="radio" id="dd-choice-yellow" value="yellow" name="highlight-color"/>
+                        <label for="dd-choice-yellow">Yellow</label>
+                        <input type="radio" id="dd-choice-green" value="green" name="highlight-color"/>
+                        <label for="dd-choice-green">Green</label>
+                        <input type="radio" id="dd-choice-blue" value="blue" name="highlight-color"/>
+                        <label for="dd-choice-blue">Blue</label>
+                        <input type="radio" id="dd-choice-clear" value="clear" name="highlight-color"/>
+                        <label for="dd-choice-clear">Clear</label>
+                    </ul>
+                </ul>
+            </div>
+            <div class="round-select">
+                <input type="radio" id="add-column-icon" value="add-column-icon" name="edit-select" onclick="toggleDropdown('add-column-dropdown-content-main')"/>
+                <label for="add-column-icon"><span id="add-column-span"><i class="material-icons">add</i><span class="icon-text">Add Column</span></label>
+                <ul id="add-column-dropdown-content-main" class="dropdown">
+                    <input type="radio" id="dd-choice-contacted" value="contacted" name="add-column" onclick="AddNewCol()"/>
+                    <label for="dd-choice-contacted">Contacted</label>
+                    <input type="radio" id="dd-choice-support" value="support" name="add-column" onclick="AddNewCol()"/>
+                    <label for="dd-choice-support">Level of Support</label>
+                    <input type="radio" id="dd-choice-donated" value="donated" name="add-column" onclick="AddNewCol()"/>
+                    <label for="dd-choice-donated">Amount Donated</label>
+                    <input type="radio" id="dd-choice-donor-class" value="donor-class" name="add-column" onclick="AddNewCol()"/>
+                    <label for="dd-choice-donor-class">Donor Classification</label>
+                    <input type="radio" id="dd-choice-custom" value="custom" name="add-column" onclick="AddNewCol()"/>
+                    <label for="dd-choice-custom">Custom</label>
+                </ul>
+            </div>
+            <div class="round-select">
+                <input type="radio" id="drop-column-icon" value="drop-column-icon" name="edit-select"/>
+                <label for="drop-column-icon"><span id="drop-column-span"><i class="material-icons">remove</i><span class="icon-text">Drop Column</span></label>
+            </div>
+            <div class="round-select">
+                <label id="edit-label">Edit Mode</label>
+                <label class="switch">
+                    <input id="edit-mode-switch" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <input type="submit" id="submit-form" class="hiddenElement"/>
+    </form>
+
+    <!-- table -->
+    <div id="list-show-table-wrapper" class="table-wrapper"> 
+        <div id="main">
+            <table id="votersTable" class="sortable" border="1">
+                <thead>
+                    <tr>
+                        <% if(userData.length!=0){ %>
+                        <% if(userData[0].ID){ %>
+                        <th id="idColumn" class="ID">ID</th>
+                        <% } %>
+                        <% if(userData[0].CountyEMSID){ %>
+                        <th class="County EMSID">County EMSID</th>
+                        <% } %>
+                        <% if(userData[0].FirstName){ %>
+                        <th class="First Name">First Name</th>
+                        <% } %>
+                        <% if(userData[0].LastName){ %>
+                        <th class="Last Name">Last Name</th>
+                        <% } %>
+                        <% if(userData[0].MiddleInitial){ %>
+                        <th class="Middle Initial">Middle Initial</th>
+                        <% } %>
+                        <% if(userData[0].NameSuffix){ %>
+                        <th class="Name Suffix">Name Suffix</th>
+                        <% } %>
+                        <% if(userData[0].HouseNumber){ %>
+                        <th class="House Number">House Number</th>
+                        <% } %>
+                        <% if(userData[0].ApartmentNumber){ %>
+                        <th class="Apartment Number">Apartment Number</th>
+                        <% } %>
+                        <% if(userData[0].StreetName){ %>
+                        <th id="th-stname" class="Street Name">Street Name</th>
+                        <% } %>
+                        <% if(userData[0].City){ %>
+                        <th id="th-city" class="City">City</th>
+                        <% } %>
+                        <% if(userData[0].ZipCode){ %>
+                        <th class="Zip Code">Zip Code</th>
+                        <% } %>
+                        <% if(userData[0].DOB){ %>
+                        <th class="Date of Birth">Date of Birth</th>
+                        <% } %>
+                        <% if(userData[0].Gender){ %>
+                        <th class="Gender">Gender</th>
+                        <% } %>
+                        <% if(userData[0].PoliticalParty){ %>
+                        <th class="Political Affiliation">Political Affiliation</th>
+                        <% } %>
+                        <% if(userData[0].ElectionDistrict){ %>
+                        <th class="Election District">Election District</th>
+                        <% } %>
+                        <% if(userData[0].AssemblyDistrict){ %>
+                        <th class="Assembly District">Assembly District</th>
+                        <% } %>
+                        <% if(userData[0].CongressDistrict){ %>
+                        <th class="Congressional District">Congressional District</th>
+                        <% } %>
+                        <% if(userData[0].CouncilDistrict){ %>
+                        <th class="Council District">Council District</th>
+                        <% } %>
+                        <% if(userData[0].SenateDistrict){ %>
+                        <th class="Senate District">Senate District</th>
+                        <% } %>
+                        <% if(userData[0].CivilCourtDistrict){ %>
+                        <th class="Civil Court District">Civil Court District</th>
+                        <% } %>
+                        <% if(userData[0].JudicialDistrict){ %>
+                        <th class="Judicial District">Judicial District</th>
+                        <% } %>
+                        <% if(userData[0].RegistrationDate){ %>
+                        <th class="Registration Date">Registration Date</th>
+                        <% } %>
+                        <% if(userData[0].StatusCode){ %>
+                        <th class="Status Code">Status Code</th>
+                        <% } %>
+                        <% if(userData[0].VoterType){ %>
+                        <th class="Voter Type">Voter Type</th>
+                        <% } %>
+                        <% if(userData[0].EffStatusChangeDate){ %>
+                        <th class="Eff. Status Change Date">Eff. Status Change Date</th>
+                        <% } %>
+                        <% if(userData[0].YearLastVoted){ %>
+                        <th class="Year Last Voted">Year Last Voted</th>
+                        <% } %>
+                        <% if(userData[0].TelephoneNumber){ %>
+                        <th class="Telephone Number">Telephone Number</th>
+                        <% } %>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(userData.length!=0){ %>
+                    <% userData.forEach(function(data){ %>
+                    <tr>
+                        <% if(userData[0].ID){ %>
+                        <td class="ID"><%= data.ID %></td>
+                        <% } %>
+                        <% if(userData[0].CountyEMSID){ %>
+                        <td class="County EMSID"><%= data.CountyEMSID %></td>
+                        <% } %>
+                        <% if(userData[0].FirstName){ %>
+                        <td class="First Name"><%= data.FirstName %></td>
+                        <% } %>
+                        <% if(userData[0].LastName){ %>
+                        <td class="Last Name"><%= data.LastName %></td>
+                        <% } %>
+                        <% if(userData[0].MiddleInitial){ %>
+                        <td class="Middle Initial"><%= data.MiddleInitial %></td>
+                        <% } %>
+                        <% if(userData[0].NameSuffix){ %>
+                        <td class="Name Suffix"><%= data.NameSuffix %></td>
+                        <% } %>
+                        <% if(userData[0].HouseNumber){ %>
+                        <td class="House Number"><%= data.HouseNumber %></td>
+                        <% } %>
+                        <% if(userData[0].ApartmentNumber){ %>
+                        <td class="Apartment Number"><%= data.ApartmentNumber %></td>
+                        <% } %>
+                        <% if(userData[0].StreetName){ %>
+                        <td class="Street Name"><%= data.StreetName %></td>
+                        <% } %>
+                        <% if(userData[0].City){ %>
+                        <td class="City"><%= data.City %></td>
+                        <% } %>
+                        <% if(userData[0].ZipCode){ %>
+                        <td class="Zip Code"><%= data.ZipCode %></td>
+                        <% } %>
+                        <% if(userData[0].DOB){ %>
+                        <td class="Date of Birth"><%= data.DOB %></td>
+                        <% } %>
+                        <% if(userData[0].Gender){ %>
+                        <td class="Gender"><%= data.Gender %></td>
+                        <% } %>
+                        <% if(userData[0].PoliticalParty){ %>
+                        <td class="Political Affiliation"><%= data.PoliticalParty %></td>
+                        <% } %>
+                        <% if(userData[0].ElectionDistrict){ %>
+                        <td class="Election District"><%= data.ElectionDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].AssemblyDistrict){ %>
+                        <td class="Assembly District"><%= data.AssemblyDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].CongressDistrict){ %>
+                        <td class="Congressional District"><%= data.CongressDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].CouncilDistrict){ %>
+                        <td class="Council District"><%= data.CouncilDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].SenateDistrict){ %>
+                        <td class="Senate District"><%= data.SenateDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].CivilCourtDistrict){ %>
+                        <td class="Civil Court District"><%= data.CivilCourtDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].JudicialDistrict){ %>
+                        <td class="Judicial District"><%= data.JudicialDistrict %></td>
+                        <% } %>
+                        <% if(userData[0].RegistrationDate){ %>
+                        <td class="Registration Date"><%= data.RegistrationDate %></td>
+                        <% } %>
+                        <% if(userData[0].StatusCode){ %>
+                        <td class="Status Code"><%= data.StatusCode %></td>
+                        <% } %>
+                        <% if(userData[0].VoterType){ %>
+                        <td class="Voter Type"><%= data.VoterType %></td>
+                        <% } %>
+                        <% if(userData[0].EffStatusChangeDate){ %>
+                        <td class="Eff. Status Change Date"><%= data.EffStatusChangeDate %></td>
+                        <% } %>
+                        <% if(userData[0].YearLastVoted){ %>
+                        <td class="Year Last Voted"><%= data.YearLastVoted %></td>
+                        <% } %>
+                        <% if(userData[0].TelephoneNumber){ %>
+                        <td class="Telephone Number"><%= data.TelephoneNumber %></td>
+                        <% } %>
+                    </tr>
+                    <% }) %>
+                </tbody>
+                <% } else{ %>
+                    <tr>
+                        <td colspan="7"><h1>No Data Found</h1></td>
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+
+    <!-- Highliting rows as necessary -->
+
+    <!-- create a hidden element that holds all of the information and then use javascript to run a script -->
+    <input type="hidden" id="highlight-vals" value="<%= list.highlight %>"/>
+
+    <% if(Object.keys(list.customCols).length > 0){ %>
+        <% for(var key of Object.keys(JSON.parse(list.customCols))){ %>
+             <!-- console.log(JSON.parse(list.customCols)[key])  -->
+            <input type="hidden" class="customCols-vals-hidden" data-colname="<%= key %>" data-colids="<%= Object.keys(JSON.parse(list.customCols)[key]) %>" data-colval="<%= JSON.stringify(Object.values(JSON.parse(list.customCols)[key])) %>"/>
+        <% } %>
+    <% } %> 
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select filters to be added ...</h5>
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="city" value="" id="cityCheckbox">
+                            <label class="form-check-label" for="city">
+                              City
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="zipcode" value="" id="zipcodeCheckbox">
+                            <label class="form-check-label" for="zipcode">
+                              Zip Code
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="dob" value="" id="dobCheckbox">
+                            <label class="form-check-label" for="dob">
+                              Date of Birth
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="gender" value="" id="genderCheckbox">
+                            <label class="form-check-label" for="gender">
+                              Gender
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="polAff" value="" id="polAffCheckbox">
+                            <label class="form-check-label" for="polAff">
+                              Political Affiliation
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="voterType" value="" id="voterTypeCheckbox">
+                            <label class="form-check-label" for="voterType">
+                              Voter Type
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="yrLastVoted" value="" id="yrLastVotedCheckbox">
+                            <label class="form-check-label" for="yrLastVoted">
+                              Year Last Voted
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="electDis" value="" id="electDisCheckbox">
+                            <label class="form-check-label" for="electDis">
+                              Election District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="assemDis" value="" id="assemDisCheckbox">
+                            <label class="form-check-label" for="assemDis">
+                              Assembly District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="congDis" value="" id="congDisCheckbox">
+                            <label class="form-check-label" for="congDis">
+                              Congressional District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="counDis" value="" id="counDisCheckbox">
+                            <label class="form-check-label" for="counDis">
+                              Council District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="senDis" value="" id="senDisCheckbox">
+                            <label class="form-check-label" for="senDis">
+                              Senate District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="civCourtDis" value="" id="civCourtDisCheckbox">
+                            <label class="form-check-label" for="civCourtDis">
+                              Civil Court District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="judDis" value="" id="judDisCheckbox">
+                            <label class="form-check-label" for="judDis">
+                              Judicial District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="regDate" value="" id="regDateCheckbox">
+                            <label class="form-check-label" for="regDate">
+                              Registration Date
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Pop-ups -->
+    <div class="alert-modal"></div>
+    <div class="confirm-modal"></div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Date Range Picker Dependencies (JQuery above) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Table Sorting Plugin -->
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <!-- Lists JS file -->
+    <script type="text/javascript" src="/javascripts/lists-show.js" charset="UTF-8"></script>
+</body>
+</html>

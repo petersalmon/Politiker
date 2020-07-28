@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/voter-profiles.css">
+    <!-- Selet2 Plugin -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    
+    <title>Politiker Voter Profiles</title>
+    <link rel="icon" href="/img/logo_compact.png">
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light"> 
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2">
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link active">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav>
+
+    <form id="voter-id-search" class="form-inline d-flex justify-content-center md-form form-sm mt-0" action="/Politiker/voter-profiles/search/" method="GET">
+      <i class="fas fa-search fa-lg" aria-hidden="true"></i>
+      <input class="form-control form-control-lg ml-3 w-75" type="text" placeholder="Search Voter ID ..."
+        aria-label="Search" name="voterid" value=<%= voterData[0].ID %>>
+    </form> 
+
+    <div id="main-container">
+      <div id="contact-info-container">
+        <h3>Contact Info</h3>
+        <div id="contact-info-sub-container" class="sub-container">
+          <p><b>Full Name:</b> <%= voterData[0].FirstName %> <%= voterData[0].LastName %> </p>
+          <p><b>Street Address:</b> <%= voterData[0].StreetName %></p>
+          <p><b>City:</b> <%= voterData[0].City %></p>
+          <p><b>Zip Code:</b> <%= voterData[0].ZipCode %></p>
+          <p><b>Phone Number:</b> <%= voterData[0].TelephoneNumber %></p>
+        </div>
+      </div>
+      <div id="voter-info-container">
+        <h3>Voter Info</h3>
+        <div id="voter-info-sub-container" class="sub-container">
+          <p><b>Date of Birth:</b> <%= voterData[0].DOB %></p>
+          <p><b>Gender:</b> <%= voterData[0].Gender %></p>
+          <p><b>Political Affiliation:</b> <%= voterData[0].PoliticalParty %></p>
+          <p><b>Registration Date:</b> <%= voterData[0].RegistrationDate %></p>
+          <p><b>Year Last Voted:</b> <%= voterData[0].YearLastVoted %></p>
+          <p><b>Voter Type:</b> <%= voterData[0].VoterType %></p>
+          <p><b>StatusCode:</b> <%= voterData[0].StatusCode %></p>
+        </div>
+      </div>
+      <div id="districts-container">
+        <h3>Districts</h3>
+        <div id="districts-sub-container" class="sub-container">
+          <p><b>Assembly District:</b> <%= voterData[0].AssemblyDistrict %></p>
+          <p><b>Civil Court District:</b> <%= voterData[0].CivilCourtDistrict %></p>
+          <p><b>Congressional District:</b> <%= voterData[0].CongressDistrict %></p>
+          <p><b>Council District:</b> <%= voterData[0].CouncilDistrict %></p>
+          <p><b>Election District:</b> <%= voterData[0].ElectionDistrict %></p>
+          <p><b>Judicial District:</b> <%= voterData[0].JudicialDistrict %></p>
+          <p><b>Senate District:</b> <%= voterData[0].SenateDistrict %></p>
+        </div>
+      </div>
+      <!-- <div id="past-donations-container">
+        <h3>Donation History</h3>
+        <div id="past-donations-container" class="sub-container">
+          <table id="donations-table">
+            <tr>
+              <th>Recipient</th>
+              <th>Political Affiliation</th>
+              <th>Office</th>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>Jill Smith</td>
+              <td>DEM</td>
+              <td>House</td>
+              <td>03/65/1976</td>
+              <td>$50.00</td>
+            </tr>
+            <tr>
+              <td>Pete Applebaum</td>
+              <td>REP</td>
+              <td>Senate</td>
+              <td>09/05/2020</td>
+              <td>$83.00</td>
+            </tr>
+            <tr>
+              <td>Sally Nipper</td>
+              <td>IND</td>
+              <td>President</td>
+              <td>07/19/2012</td>
+              <td>$42.00</td>
+            </tr>
+          </table>
+        </div>
+      </div> -->
+      <div id="contact-history-container">
+        <h3>Contact History</h3>
+        <div id="contact-history-container" class="sub-container">
+        </div>
+      </div>
+      <div id="support-prob-container">
+        <h3>Level of Support</h3>
+        <div id="support-prob-sub-container" class="sub-container"></div>
+      </div>
+      <div id="button-container">
+        <h3>Add to Campaign List</h3>
+        <select id="campaign-select">
+          <option disabled selected value> Select a Campaign ... </option>
+        </select>
+        <div id="button-sub-container" class="sub-container">
+          <button class="btn btn-primary">Add to Phone List</button>
+          <button class="btn btn-primary">Add to Text List</button>
+          <button class="btn btn-primary">Add to Mailing List</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Date Range Picker Dependencies (JQuery above) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <!-- Table Sorting Plugin -->
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <!-- Lists JS file -->
+    <script type="text/javascript" src="/javascripts/voter-profiles.js" charset="UTF-8"></script>
+</body>
+</html>

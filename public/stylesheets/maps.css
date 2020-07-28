@@ -1,0 +1,59 @@
+
+.nav-link {
+    color: #00B4EB;
+    font-size: 17px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.custom-toggler .navbar-toggler-icon { 
+    background-image: url( 
+"data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(245, 183, 11, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); 
+} 
+
+#map {
+    height: 700px;
+}
+
+h1 {
+    padding-top: 10px;
+    padding-left: 15px;
+    color: rgb(250, 181, 10);
+    font-family: 'Offside'; 
+  } 
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.lorem {
+    font-style: italic;
+    color: #AAA;
+}
+
+.right-button {
+    font-size: 17px;
+    position: absolute;
+    right: 30px;
+    top: 100px;
+}
+
+.div-class {
+    height: 80px;
+    width: 100%;
+}
+
+#voters-to-list {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 5px 10px 0px;
+    font-size: 1.3rem;
+    font-family: "Offside";
+    display: none;
+}

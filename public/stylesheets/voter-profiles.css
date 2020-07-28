@@ -1,0 +1,97 @@
+.nav-link {
+    color: #00B4EB;
+    font-size: 17px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.custom-toggler .navbar-toggler-icon { 
+    background-image: url( 
+"data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(245, 183, 11, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); 
+} 
+
+h1, h2, h3 {
+    padding-top: 10px;
+    padding-left: 15px;
+    color: rgb(0, 0, 0);
+    /* font: "Helvetica Neue", Arial, Helvetica, sans-serif;  */
+} 
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+#main-search-div {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#voter-id-search-main {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#portal-welcome {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#voter-id-search {
+    margin-top: 10px !important;
+    width: 25%;
+}
+
+#main-container {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 50% 50%;
+    width: 100%;
+    height: 80%;
+    padding: 3%;
+}
+
+#button-container {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+#button-sub-container {
+    justify-content:center;
+    align-items:center;
+    margin-top: 10%;
+}
+
+#button-sub-container button{
+    display:block;
+    width: 50%;
+    margin: 10px auto;
+}
+
+.sub-container {
+    padding: 10px;
+}
+
+#campaign-select {
+    width: 35%;
+}
+
+/* #donations-table {
+    width:100%;
+    align-items: center;
+}
+
+#donations-table td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+} */

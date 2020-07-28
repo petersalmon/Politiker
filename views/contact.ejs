@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/contact.css">
+   <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <title>Politiker Contact Us</title>
+</head>
+<body>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light">
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2">
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link active">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav>
+
+    <!-- Loader -->
+    <div class="loader"> 
+        <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+    </div>
+
+    <div class="main-block">
+      <div class="left-part">
+        <i class="fas fa-envelope"></i>
+        <i class="fas fa-at"></i>
+        <i class="fas fa-mail-bulk"></i>
+      </div>
+      <form action="/Politiker/contact" class="contact-form" method="POST" onsubmit="return submitEmailForm(this);">
+        <h1>Contact Us</h1>
+        <div class="info">
+          <input id="name" type="text" name="name" placeholder="Full name" required>
+          <input id="email" type="email" name="email" placeholder="Email" required>
+          <input id="subject" type="text" name="subject" placeholder="Subject" required>
+        </div>
+        <div>
+          <textarea id="message" name="message" placeholder="Body" rows="4" required></textarea>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+
+    <!-- Alert Pop-ups -->
+    <div class="alert-modal"></div>
+    <div class="confirm-modal"></div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Table Sorting Plugin -->
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>   
+    <!-- Campaigns JS file -->
+    <script type="text/javascript" src="/javascripts/contact.js" charset="UTF-8"></script> 
+</body>
+</html>

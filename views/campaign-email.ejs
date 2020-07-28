@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/campaigns.css">
+    <!-- Selet2 Plugin -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <title>Politiker Email Campaign</title>
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light"> 
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2">
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link active">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav> 
+
+    <%  if(flashMsg.length > 0){ %>
+        <div id="flash-msg" style="text-align: center" class="alert alert-<%= flashType %>">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flashMsg %>
+        </div>
+    <% } %> 
+
+     <!-- Loader -->
+     <div class="loader"> 
+        <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+    </div>
+
+    <div class="camp-info-container">
+        <div class="camp-div">
+            <div class="camp-sub-div">
+                <div class="camp-info-show" id="campInfoArea">
+                    <h2 id="camp-title">Title: <%= camp.title %></h2>
+                    <h3>Description:</h3>
+                    <p class="camp-info-show-sub-1"><%= camp.description %></p>
+                    <h2>By: <%= camp.creator %></h2>
+                </div>
+                </br>
+                <div class="button-container">
+                    <button type="button" id="import-voters-btn" class="btn btn-primary right-button hiddenElement" data-target="#myCampModalSub" data-toggle="modal">+ Import Voters</button>
+                    <form id="delete-camp-form" class="hiddenElement" action="/Politiker/campaigns/email-campaign/<%= camp._id %>?_method=DELETE" method="POST">
+                        <button type="button" name="delete" id="delete-camp-btn" class="btn btn-danger right-button" onclick="confirmCampDelete()">Delete Campaign</button>
+                    </form>
+                    <label id="save-camp-btn" class="btn btn-success right-button hiddenElement" tabindex="0" listId="<%= camp._id %>">Save Campaign</label>
+                    <!-- <button type="button" id="filter-list-btn" class="btn btn-primary right-button" data-target="#myModal" data-toggle="modal">Add Filter</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="camp-search-div" class="camp-form" action="/Politiker/campaigns/<%= camp._id %>?_method=PUT" method="POST">
+        <input type="text" id="camp-search" placeholder="Search ...">
+        <div id="edit-div">
+            <div id="highlight-div">
+                <input type="radio" id="edit-choice-higlight" value="highlight" name="edit-type" onclick="toggleDropdown('highlight-dropdown-content')"/>
+                <label for="edit-choice-higlight"><span id="highlight-span"><i class="material-icons">create</i><span class="icon-text">Highlight</span></label>
+                <ul id="highlight-dropdown-content" class="dropdown">
+                    <input type="radio" id="dd-choice-red" value="red" name="highlight-color"/>
+                    <label for="dd-choice-red">Red</label>
+                    <input type="radio" id="dd-choice-orange" value="orange" name="highlight-color"/>
+                    <label for="dd-choice-orange">Orange</label>
+                    <input type="radio" id="dd-choice-yellow" value="yellow" name="highlight-color"/>
+                    <label for="dd-choice-yellow">Yellow</label>
+                    <input type="radio" id="dd-choice-green" value="green" name="highlight-color"/>
+                    <label for="dd-choice-green">Green</label>
+                    <input type="radio" id="dd-choice-blue" value="blue" name="highlight-color"/>
+                    <label for="dd-choice-blue">Blue</label>
+                    <input type="radio" id="dd-choice-clear" value="clear" name="highlight-color"/>
+                    <label for="dd-choice-clear">Clear</label>
+                </ul>
+            </div>
+            <!-- </ul> -->
+            <div class="round-select">
+                <label id="edit-label">Edit Mode</label>
+                <label class="switch">
+                    <input id="edit-mode-switch" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </form>
+
+    <div id="main-container">
+        <div id="stats-total-voters">
+            <h3>Campaign Statistics</h3>
+            <div id="stats-total-voters-body">
+                <p>Total Voters</p>
+                <h3></h3>
+            </div>
+        </div>
+        <div id="stats-voters-contacted">
+            <p>Voters Emailed</p>
+            <h3></h3>
+        </div>
+        <div id="stats-voters-responded">
+            <p>Voters Responded</p>
+            <h3></h3>
+        </div>
+        <div id="stats-voters-to-contact">
+            <p>Voters To Email</p>
+            <h3></h3>
+        </div>
+        <div id="email-list-container">
+            <h3>Email List</h3>
+            <div id="email-list-sub-container" class="sub-container">
+                <table id="emailTable" class="sortable" border="1">
+                    <thead>
+                        <tr>
+                            <% if(voterData.length!=0){ %>
+                            <th id="idColumn" class=" custom-col ID">ID</th>
+                            <th class="custom-col first-name">First Name</th>
+                            <th class="custom-col last-name">Last Name</th>
+                            <th class="custom-col email">Email</th>
+                            <th class="custom-col contacted">Emailed</th>
+                            <th class="custom-col responded">Responded</th>
+                            <th class="custom-col level-of-support">Level of Support</th>
+                            <th class="custom-col notes">Notes</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(voterData.length!=0){ %>
+                        <% voterData.forEach(function(data){ %>
+                        <tr>
+                            <td class="ID"><%= data.ID %></td>
+                            <td class="first-name"><%= data.FirstName %></td>
+                            <td class="last-name"><%= data.LastName %></td>
+                            <td class="email"><%= data.Email %></td>
+                            <td class="contacted">
+                                <select id="contacted-select">
+                                    <option>No</option>
+                                    <option>Yes</option>
+                                </select>
+                            </td>
+                            <td class="responded">
+                                <select id="responded-select">
+                                    <option>No</option>
+                                    <option>Yes</option>
+                                </select>
+                            </td>
+                            <td class="level-of-support">
+                                <select id="level-of-support-select" placeholder="">
+                                    <option></option>
+                                    <option>Support</option>
+                                    <option>Opposed</option>
+                                    <option>Undecided</option>
+                                </select>
+                            </td>
+                            <td class="notes"><div contenteditable>Enter notes here ...</div></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                    <% } else{ %>
+                        <tr>
+                            <td colspan="7"><h1>No Data Found</h1></td>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+        <!-- <div id="voter-info-container"> -->
+        <div id="voter-info-sub-container-1" class="">
+            <h3>Voter Info</h3>
+            <p id="p-fn"><b>First Name:</b></p>
+            <p id="p-ln"><b>Last Name:</b></p>
+            <p id="p-mi"><b>Middle Initial:</b></p>
+            <p id="p-hn"><b>House Number:</b></p>
+            <p id="p-an"><b>Apartment Number:</b></p>
+            <p id="p-sa"><b>Street Address:</b></p>
+            <p id="p-city"><b>City:</b></p>
+            <p id="p-zc"><b>Zip Code:</b></p>
+        </div>
+        <div id="voter-info-sub-container-2" class="">
+            <p id="p-dob"><b>Date of Birth:</b></p>
+            <p id="p-gender"><b>Gender:</b></p>
+            <p id="p-pol-aff"><b>Political Affiliation:</b></p>
+            <p id="p-reg-date"><b>Registration Date:</b></p>
+            <p id="p-ylv"><b>Year Last Voted:</b></p>
+            <p id="p-voter-type"><b>Voter Type:</b></p>
+            <p id="p-stat"><b>StatusCode:</b></p>
+        </div>
+        <!-- </div> -->
+        <div id="script-container">
+            <div id="script-header">
+                <h3 id="h3-script">Script</h3>
+                <div id="select-script-div"></div>
+            </div>
+            <div id="script-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myCampModalSub">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import voters from lists</h5>
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="import-voters-form" action="/Politiker/campaigns/email-campaign/<%= camp._id %>/import_voters?_method=PUT" method="POST">
+                        <h5>Add voters from ...</h5>
+                        <% listTitles.forEach(function(listName){ %>
+                        <div class="modal-form-div">
+                            <input class="modal-form-input" type="checkbox" name="lists[<%= listName %>]" value="">
+                            <label class="modal-form-label" for="lists[<%= listName %>]">"<%= listName %>"</label>
+                        </div>
+                        <% }); %>
+                        <div class="modal-footer">
+                            <input type="submit" name="submit" value="Done" class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Elements -->
+
+    <input type="hidden" id="highlight-vals" value="<%= camp.highlight %>"/>
+
+    <input type="hidden" id="camp-url" value="<%= campUrl %>"/>
+
+    <% if(Object.keys(camp.customCols).length > 0){ %>
+        <% for(var key of Object.keys(JSON.parse(camp.customCols))){ %>
+             <!-- console.log(JSON.parse(list.customCols)[key])  -->
+            <input type="hidden" class="customCols-vals-hidden" data-colname="<%= key %>" data-colids="<%= Object.keys(JSON.parse(camp.customCols)[key]) %>" data-colval="<%= JSON.stringify(Object.values(JSON.parse(camp.customCols)[key])) %>"/>
+        <% } %>
+    <% } %>
+
+    <% scripts.forEach(function(script){ %>
+       <input type="hidden" class="script-vals-hidden" data-type="<%= script.type %>" data-title="<%= script.title %>" data-content="<%= script.content %>"/>
+    <% }) %>
+
+    <% voterData.forEach(function(voter){ %>
+    <input type="hidden" class="voter-vals-hidden" data-id="<%= voter.ID %>" data-dob="<%= voter.DOB %>" 
+           data-gender="<%= voter.Gender %>" data-pol-aff="<%= voter.PoliticalParty %>" data-reg-date="<%= voter.RegistrationDate %>" data-stat="<%= voter.StatusCode %>" 
+           data-voter-type="<%= voter.VoterType %>" data-ylv="<%= voter.YearLastVoted %>" data-fn="<%= voter.FirstName %>" data-ln="<%= voter.LastName %>"
+           data-mi="<%= voter.MiddleInitial %>" data-hn="<%= voter.HouseNumber %>" data-an="<%= voter.ApartmentNumber %>" data-sa="<%= voter.StreetName %>"
+           data-city="<%= voter.City %>" data-zc="<%= voter.ZipCode %>"/>
+    <% }) %> 
+    <!-- Need to add email column above -->
+
+
+
+    <!-- Alert Pop-ups -->
+    <div class="alert-modal"></div>
+    <div class="confirm-modal"></div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Table Sorting Plugin -->
+    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>   
+    <!-- Campaigns JS file -->
+    <script type="text/javascript" src="/javascripts/campaign-email.js" charset="UTF-8"></script> 
+</body>
+</html>

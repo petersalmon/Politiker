@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/lists.css">
+    <!-- Selet2 Plugin -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+    <title>Politiker Lists</title>
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light"> 
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2">
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link active">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav>
+
+    <!-- list form -->
+
+    <div class="form-container">
+        <div class="list-div">
+            <form class="list-form" action="/Politiker/lists" method="POST">
+                <div class="list-info" id="listInfoArea">
+
+                </div>
+                </br>
+                <h3>Filters:</h3>
+                <div class="list-filters" id="addFiltersArea">
+                  <input type="hidden" id="idList" value="" name="list[idList]"/>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="btn btn-primary right-button" data-target="#myModal" data-toggle="modal">Add Filter</button>
+                    <button id="saveListBtn" type="submit" class="btn btn-success right-button">Save List</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-wrapper"> 
+        <table id="votersTable" border="1">
+            <thead>
+                <tr>
+                    <th id="idColumn" class="ID">ID</th>
+                    <th class="County EMSID">County EMSID</th>
+                    <th class="First Name">First Name</th>
+                    <th class="Last Name">Last Name</th>
+                    <th class="Middle Initial">Middle Initial</th>
+                    <th class="Name Suffix">Name Suffix</th>
+                    <th class="House Number">House Number</th>
+                    <th class="Apartment Number">Apartment Number</th>
+                    <th id="th-stname" class="Street Name">Street Name</th>
+                    <th id="th-city" class="City">City</th>
+                    <th class="Zip Code">Zip Code</th>
+                    <th class="Date of Birth">Date of Birth</th>
+                    <th class="Gender">Gender</th>
+                    <th class="Political Affiliation">Political Affiliation</th>
+                    <th class="Election District">Election District</th>
+                    <th class="Assembly District">Assembly District</th>
+                    <th class="Congressional District">Congressional District</th>
+                    <th class="Council District">Council District</th>
+                    <th class="Senate District">Senate District</th>
+                    <th class="Civil Court District">Civil Court District</th>
+                    <th class="Judicial District">Judicial District</th>
+                    <th class="Registration Date">Registration Date</th>
+                    <th class="Status Code">Status Code</th>
+                    <th class="Voter Type">Voter Type</th>
+                    <th class="Eff. Status Change Date">Eff. Status Change Date</th>
+                    <th class="Year Last Voted">Year Last Voted</th>
+                    <th class="Telephone Number">Telephone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(userData.length!=0){ %>
+                <% userData.forEach(function(data){ %>
+                <tr>
+                    <td class="ID"><%= data.ID %></td>
+                    <td class="County EMSID"><%= data.CountyEMSID %></td>
+                    <td class="First Name"><%= data.FirstName %></td>
+                    <td class="Last Name"><%= data.LastName %></td>
+                    <td class="Middle Initial"><%= data.MiddleInitial %></td>
+                    <td class="Name Suffix"><%= data.NameSuffix %></td>
+                    <td class="House Number"><%= data.HouseNumber %></td>
+                    <td class="Apartment Number"><%= data.ApartmentNumber %></td>
+                    <td class="Street Name"><%= data.StreetName %></td>
+                    <td class="City"><%= data.City %></td>
+                    <td class="Zip Code"><%= data.ZipCode %></td>
+                    <td class="Date of Birth"><%= data.DOB %></td>
+                    <td class="Gender"><%= data.Gender %></td>
+                    <td class="Political Affiliation"><%= data.PoliticalParty %></td>
+                    <td class="Election District"><%= data.ElectionDistrict %></td>
+                    <td class="Assembly District"><%= data.AssemblyDistrict %></td>
+                    <td class="Congressional District"><%= data.CongressDistrict %></td>
+                    <td class="Council District"><%= data.CouncilDistrict %></td>
+                    <td class="Senate District"><%= data.SenateDistrict %></td>
+                    <td class="Civil Court District"><%= data.CivilCourtDistrict %></td>
+                    <td class="Judicial District"><%= data.JudicialDistrict %></td>
+                    <td class="Registration Date"><%= data.RegistrationDate %></td>
+                    <td class="Status Code"><%= data.StatusCode %></td>
+                    <td class="Voter Type"><%= data.VoterType %></td>
+                    <td class="Eff. Status Change Date"><%= data.EffStatusChangeDate %></td>
+                    <td class="Year Last Voted"><%= data.YearLastVoted %></td>
+                    <td class="Telephone Number"><%= data.TelephoneNumber %></td>
+                    <!-- <td><a href="/user/edit/<%=data.id%>">Edit</a></td>
+                    <td><a href="/user/delete/<%=data.id%>">Delete</a></td> -->
+                </tr>
+                <% }) %>
+            </tbody>
+            <% } else{ %>
+                <tr>
+                    <td colspan="7">No Data Found</td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select filters to be added ...</h5>
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="city" value="" id="cityCheckbox">
+                            <label class="form-check-label" for="city">
+                              City
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="zipcode" value="" id="zipcodeCheckbox">
+                            <label class="form-check-label" for="zipcode">
+                              Zip Code
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="dob" value="" id="dobCheckbox">
+                            <label class="form-check-label" for="dob">
+                              Date of Birth
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="gender" value="" id="genderCheckbox">
+                            <label class="form-check-label" for="gender">
+                              Gender
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="polAff" value="" id="polAffCheckbox">
+                            <label class="form-check-label" for="polAff">
+                              Political Affiliation
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="voterType" value="" id="voterTypeCheckbox">
+                            <label class="form-check-label" for="voterType">
+                              Voter Type
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="yrLastVoted" value="" id="yrLastVotedCheckbox">
+                            <label class="form-check-label" for="yrLastVoted">
+                              Year Last Voted
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="electDis" value="" id="electDisCheckbox">
+                            <label class="form-check-label" for="electDis">
+                              Election District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="assemDis" value="" id="assemDisCheckbox">
+                            <label class="form-check-label" for="assemDis">
+                              Assembly District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="congDis" value="" id="congDisCheckbox">
+                            <label class="form-check-label" for="congDis">
+                              Congressional District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="counDis" value="" id="counDisCheckbox">
+                            <label class="form-check-label" for="counDis">
+                              Council District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="senDis" value="" id="senDisCheckbox">
+                            <label class="form-check-label" for="senDis">
+                              Senate District
+                            </label> 
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="civCourtDis" value="" id="civCourtDisCheckbox">
+                            <label class="form-check-label" for="civCourtDis">
+                              Civil Court District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="judDis" value="" id="judDisCheckbox">
+                            <label class="form-check-label" for="judDis">
+                              Judicial District
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="regDate" value="" id="regDateCheckbox">
+                            <label class="form-check-label" for="regDate">
+                              Registration Date
+                            </label>
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Date Range Picker Dependencies (JQuery above) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>   
+    <!-- Lists JS file -->
+    <script type="text/javascript" src="/javascripts/lists-new.js" charset="UTF-8"></script>
+</body>
+</html>

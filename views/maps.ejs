@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap Style Sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"  type='text/css'>
+    <!-- D3 Library -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+            integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+            crossorigin=""/>
+            <!-- Adding Offside font -->
+    <link href="https://fonts.googleapis.com/css?family=Offside&display=swap" rel="stylesheet">
+    <!-- Marker cluster Leaflet Plugin-->
+    <link rel="stylesheet" href="/MarkerClusterDist/MarkerCluster.css"> <!--plugins-->
+    <link rel="stylesheet" href="/MarkerClusterDist/MarkerCluster.Default.css"> <!--plugins-->
+    <!-- Leaflet.Geoman -->
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css">
+    <!-- Leaflet.StyleEditor -->
+    <link rel="stylesheet" href="/Leaflet-StyleEditor/dist/css/Leaflet.StyleEditor.min.css"> <!--plugins-->
+    <!-- Leaflet Sidebar Plugin CSS -->
+    <link rel="stylesheet" href="/Sidebar/leaflet-sidebar.css"> <!--plugins-->
+    <!-- Custom CSS file -->
+    <link rel="stylesheet" href="/stylesheets/maps.css">
+    <!-- Selet2 Plugin -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    
+    <title>Politiker Maps</title>
+</head>
+<body>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg py-3 bg-light"> 
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">
+            <img src="/img/logo.png" width="200" alt="" class="d-inline-block align-middle mr-2"> <!--img-->
+          </a>
+      
+          <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler custom-toggler">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+       
+          <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a href="/Politiker/home/" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
+              <li class="nav-item"><a href="/Politiker/maps/" class="nav-link active">Maps</a></li>
+              <li class="nav-item"><a href="/Politiker/lists/" class="nav-link">Lists</a></li>
+              <li class="nav-item"><a href="/Politiker/campaigns/" class="nav-link">Campaigns</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scripts
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/Politiker/scripts/phone">Manage Phone Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/text">Manage Text Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/email">Manage Email Scripts</a>
+                  <a class="dropdown-item" href="/Politiker/scripts/door">Manage Door Scripts</a>
+                </div>
+              </li>
+              <li class="nav-item"><a href="/Politiker/voter-profiles/" class="nav-link">Voter Profiles</a></li>
+            </ul>
+          </div>
+          <ul class="nav nav-pills navbar-right">
+            <li class="nav-item"><a href="/Politiker/account/" class="nav-link">Account</a></li>
+            <li class="nav-item"><a href="/Politiker/contact/" class="nav-link">Contact Us</a></li>
+            <li class="nav-item"><a href="/Politiker/logout" class="nav-link">Logout</a></li>
+         </ul>
+        </div>
+    </nav>
+
+    <%  if(flashMsg.length > 0){ %>
+      <div style="text-align: center" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flashMsg %>
+      </div>
+    <% } %>
+
+    <h1>New York City, NY, U.S.</h1>
+
+    <div class="container-fluid">
+        <div class="row no-gutters">
+          <div class="col-12">
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="sidebar collapsed">
+                <!-- Nav tabs -->
+                <div class="sidebar-tabs">
+                    <!-- Sidebar selection icons -->
+                    <ul role="tablist">
+                        <li><a href="#voters" role="tab"><i class="fa fa-id-card"></i></a></li>
+                        <li><a href="#explore" role="tab"><i class="fa fa-info-circle"></i></a></li>
+                        <li id="drawLi"><a><i id="drawIcon" class="fa fa-edit"></i></a></li> <!--class="disabled"-->
+                    </ul>
+                    <ul role="tablist">
+                        <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+                    </ul>
+                </div>
+        
+                <!-- Tab panes -->
+                <div class="sidebar-content">
+
+                    <div class="sidebar-pane" id="voters">
+                       
+                        <h1 class="sidebar-header">Voters  <span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                        <button id="voters-to-list" onclick="location.href='/Politiker/maps/lists/new';" class="btn btn-primary">Save to List</button>
+                        <p id="sidebar-voters-content"></p>
+
+                    </div>
+
+                    <div class="sidebar-pane" id="explore">
+
+                        <!-- <h1 class="sidebar-header">
+                            <input type="text" placeholder="Search for location ...">
+                            <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        </h1> -->
+
+                        <p><i>Select a neighborhood below to explore its demographic data.</i></p>
+
+                        <select id="explore-select" onchange="if (this.selectedIndex) getSelect(this);">
+                            <!-- <optgroup id="zip-select" label="Zip Code"></optgroup> -->
+                            <optgroup id="cd-select" label="Community District">
+                                <option disabled selected value> Select a Community ... </option>
+                            </optgroup>
+                        </select>
+
+                        <p id="demographic-data"></p>
+                        
+                    </div>
+
+                    <!-- <div class="sidebar-pane" id="draw">
+                        <h1 class="sidebar-header">Draw<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                    </div> -->
+
+                </div>
+            </div>
+
+            <!-- Interactive map -->
+            <div id="map" class="sidebar-map"></div>
+
+          </div>
+          <!-- <div class="col-3"></div> -->
+        </div>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Selet2 Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+            crossorigin="anonymous">
+    </script>   
+    <!-- Leaflet Dependencies -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2rep43lZ6J3olihgT85L1wngwBPHarjI" async defer></script> -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin="">
+    </script>
+    <!-- <script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script> -->
+    <!-- JS file holding visualizaiton code -->
+    <!-- Leaflet plugin for reading in JSON files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"></script>
+    <!-- Leaflet plugin for cluster markers -->
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+    <!-- Canvas markers plugin -->
+    <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
+    <!-- Cluster markers plugin -->
+    <script src="/MarkerClusterDist/leaflet.markercluster.js"></script> <!--plugins-->
+    <!-- Leaflet Sidebar Plugin JS -->
+    <script type="text/javascript" src="/Sidebar/leaflet-sidebar.js"></script> <!--plugins-->
+    <!-- Leaflet.Geoman -->
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+    <!-- Leaflet.StyleEditor -->
+    <script type="text/javascript" src="/Leaflet-StyleEditor/dist/javascript/Leaflet.StyleEditor.min.js"></script> <!--plugins-->
+    <!-- CitySDK API-->
+    <script src="/CitySDK/citysdk.js"></script> <!--plugins-->
+    <!-- Turf.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    <!-- Map JS -->
+    <script type="text/javascript" src="/javascripts/maps.js" charset="UTF-8"></script>
+    <!-- Main JS file -->
+    <script type="text/javascript" src="/javascripts/main.js" charset="UTF-8"></script> 
+</body>
+</html>
+

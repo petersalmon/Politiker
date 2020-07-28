@@ -1,0 +1,152 @@
+.nav-link {
+    color: #00B4EB;
+    font-size: 17px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.custom-toggler .navbar-toggler-icon { 
+    background-image: url( 
+"data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(245, 183, 11, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); 
+} 
+
+h1, h2, h3 {
+    padding-top: 10px;
+    padding-left: 15px;
+    color: rgb(0, 0, 0);
+    /* font: "Helvetica Neue", Arial, Helvetica, sans-serif;  */
+} 
+
+h5 {
+    text-align: center;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+/* Loader */
+
+.loader {
+    position: fixed;
+    z-index: 99;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader.hidden {
+    animation: fadeOut 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Cards */
+
+img {
+    float: left;
+}
+
+.card {
+    box-shadow: 0 10px 14px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 80%;
+    border-radius: 10px;
+    margin: 0 auto;
+    float: left;
+    margin-bottom: 25px;
+}
+  
+.card:hover {
+    box-shadow: 0 20px 28px 0 rgba(0,0,0,0.2);
+}
+
+#img-card {
+    width: 33%;
+    border-radius: 5px 5px 0 0;
+}
+
+.card-container {
+    padding: 2px 16px;
+    margin: 0 auto;
+}
+
+.hiddenElement {
+    display: none;
+}
+
+/* Page Sections */
+
+/* #main-container {
+    display: grid;
+    grid-template-rows: 25% 25% 25% 25%;
+    grid-template-rows: 12em 27em 22em;
+    width: 100%;
+    height: 80%;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 3%;
+    margin-bottom: 10%;
+} */
+
+#recent-lists {
+    grid-row: 1/2;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    margin-top: 15px;
+}
+
+#recent-camps {
+    grid-row: 2/3;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    margin-top: 15px;
+}
+
+/* Chart */
+
+#camp-progress-area {
+    margin-bottom: 30px;
+}
+
+#select-area {
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.select2-container {
+    margin-right: 30px !important;
+}
+
+label{
+    width: 26%;
+}
+
+#select-date-range{
+    width: 80%;
+    margin-left: 10px;
+}
+
+#camp-progress-chart {
+    width: 75% !important;
+    height: 75% !important;
+    margin: 0 auto !important;
+}
