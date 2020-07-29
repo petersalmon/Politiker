@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // AUTHORIZATION ROUTES
-app.use("/Politiker", authRoutes);
+app.use("/politiker-web-app.herokuapp.com", authRoutes);
 
 // HOME ROUTE
 app.use("/Politiker/home", homeRoutes);
