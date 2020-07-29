@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // AUTHORIZATION ROUTES
-app.use("/politiker-web-app.herokuapp.com", authRoutes);
+app.use("*", authRoutes);
 
 // HOME ROUTE
 app.use("/Politiker/home", homeRoutes);
@@ -74,9 +74,9 @@ app.use("/Politiker/contact", contactRoutes);
 app.use("/Politiker/account", accountRoutes);
 
 // Catch all other routes
-app.get("*",function(req,res){
-    res.send("Welcome to the void! You've taken a wrong turn.");
-});
+// app.get("*",function(req,res){
+//     res.send("Welcome to the void! You've taken a wrong turn.");
+// });
 
 // Listen to this port
 const PORT = process.env.PORT || 8000;
