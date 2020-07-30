@@ -149,16 +149,20 @@ async function verifiedCheck(req, res, next){
 
 router.post('/login', verifiedCheck, function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
+        console.log("BEGINNING USER AUTHENTICATION PROCESS");
         if(err){
+            console.log("GENERATING ERROR");
             return next(err); // will generate a 500 error
         }
         // Generate a JSON response reflecting authentication status
         if(!user){
+            console.log("USER NOT FOUND");
             req.flash("error", 'Invalid email or password. Please try again.');
             return res.render('login', {flashMsg: req.flash('error'), flashType: 'danger'});
         }
         req.login(user, loginErr => {
             if (loginErr) {
+                console.log("LOGIN ERROR");
                 console.log(loginErr)
                 req.flash("error", 'Invalid email or password. Please try again.');
                 return res.render('login', {flashMsg: req.flash('error'), flashType: 'danger'});
