@@ -20,7 +20,32 @@ require("dotenv/config");
 
 // module.exports = mysqlConnection;
 
-var mysqlConnection = mysql.createConnection({
+function initializeConnection(config) {
+    function addDisconnectHandler(connection) {
+        connection.on("error", function (error) {
+            if (error instanceof Error) {
+                if (error.code === "PROTOCOL_CONNECTION_LOST") {
+                    console.error(error.stack);
+                    console.log("Lost connection. Reconnecting...");
+
+                    initializeConnection(connection.config);
+                } else if (error.fatal) {
+                    throw error;
+                }
+            }
+        });
+    }
+
+    var connection = mysql.createConnection(config);
+
+    // Add handlers.
+    addDisconnectHandler(connection);
+
+    connection.connect();
+    return connection;
+}
+
+var connection = initializeConnection({
     host: "us-cdbr-east-02.cleardb.com",
     user: "b085f4726117c1",
     password: process.env.HEROKU_MYSQL_PASSWORD,
@@ -28,28 +53,25 @@ var mysqlConnection = mysql.createConnection({
     multipleStatements: true
 });
 
-function handleDisconnect() {
-  var connection = mysqlConnection // Recreate the connection, since
-                                // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
+function handleDisconnect(connection) {
+    connection.on('error', function(err) {
+      if (!err.fatal) {
+        return;
+      }
+  
+      if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+        throw err;
+      }
+  
+      console.log('Re-connecting lost connection: ' + err.stack);
+  
+      connection = mysql.createConnection(connection.config);
+      handleDisconnect(connection);
+      connection.connect();
+    });
 }
-
-handleDisconnect();
+  
+handleDisconnect(connection);
 
 
 module.exports = mysqlConnection;
