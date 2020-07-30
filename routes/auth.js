@@ -14,6 +14,12 @@ passport.use(new passportLocal(User.authenticate()))
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Default to login page
+
+router.get("/",function(req,res){
+    res.redirect("/Politiker/login");
+});
+
 // Getting the register page 
 
 router.get("/register",function(req,res){
