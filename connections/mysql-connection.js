@@ -18,7 +18,6 @@ require("dotenv/config");
 //     }
 // });
 
-// module.exports = mysqlConnection;
 
 function initializeConnection(config) {
     function addDisconnectHandler(connection) {
