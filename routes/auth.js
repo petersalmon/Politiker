@@ -119,6 +119,8 @@ async function verifiedCheck(req, res, next){
     try{
         console.log("EXECUTING VERIFIED CHECK");
         var user = await User.findOne({username: req.body.username});
+        console.log("FOUND USER");
+        console.log(user);
         if(!user){
             console.log("USER NOT FOUND");
             req.flash("error", 'No account associated with that email was found.');
