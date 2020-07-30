@@ -120,13 +120,17 @@ async function verifiedCheck(req, res, next){
         console.log("EXECUTING VERIFIED CHECK");
         var user = await User.findOne({username: req.body.username});
         if(!user){
+            console.log("USER NOT FOUND");
             req.flash("error", 'No account associated with that email was found.');
             res.render('login', {flashMsg: req.flash('error'), flashType: 'danger'});
         }
         else{
+            console.log("USER FOUND");
             if(user.isVerified){
+                console.log("USER IS VERIFIED");
                 return next();
             }
+            console.log("USER IS NOT VERIFIED");
             req.flash('error', 'Your account has not been verified. Please check your email to verify your account');
             return res.render('login', {flashMsg: req.flash('error'), flashType: 'danger' });
         }
