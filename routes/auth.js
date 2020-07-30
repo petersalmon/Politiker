@@ -117,6 +117,7 @@ router.get("/login",function(req,res){
 
 async function verifiedCheck(req, res, next){
     try{
+        console.log("EXECUTING VERIFIED CHECK");
         var user = await User.findOne({username: req.body.username});
         if(!user){
             req.flash("error", 'No account associated with that email was found.');
@@ -132,6 +133,7 @@ async function verifiedCheck(req, res, next){
     }
     catch(error){
         console.log(error);
+        console.log("ERROR OCCURED DURING VERIFIED CHECK");
         req.flash('error', 'Something went wrong. Please contact us at ' + process.env.GMAIL_USER);
         return res.render('login', {flashMsg: req.flash('error'), flashType: 'danger' });
     }
