@@ -74,4 +74,4 @@ function handleDisconnect(connection) {
 handleDisconnect(connection);
 
 
-module.exports = mysqlConnection;
+module.exports = connection;
