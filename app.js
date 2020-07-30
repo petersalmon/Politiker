@@ -73,6 +73,11 @@ app.use("/Politiker/contact", contactRoutes);
 // ACCOUNT ROUTES
 app.use("/Politiker/account", accountRoutes);
 
+// Go to Politiker by default
+app.get("/",function(req,res){
+    res.redirect("/Politiker");
+});
+
 // Catch all other routes
 app.get("*",function(req,res){
     res.send("Welcome to the void! You've taken a wrong turn.");
