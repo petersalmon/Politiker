@@ -14,7 +14,7 @@ require("dotenv/config");
 
 const db = process.env.MONGODB_CONNECTION;
 
-const mongoConnection = async () => {
+const mongoDbConnection = async () => {
     try {
       await mongoose.connect(db, {
         useUnifiedTopology: true,
@@ -28,4 +28,4 @@ const mongoConnection = async () => {
     }
 };
 
-module.exports = mongoConnection;
+module.exports = mongoDbConnection;
