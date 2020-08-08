@@ -91,7 +91,7 @@ function getData() {
     console.log(date);
     console.log(campType);
 
-    $.get("http://localhost:8000/Politiker/home/graph", { campaign: campaign, 
+    $.get("https://politiker-web-app.herokuapp.com/Politiker/home/graph", { campaign: campaign, 
                                                           campType: campType,
                                                           attribute: attribute,
                                                           date: date }, function(result, status) {
