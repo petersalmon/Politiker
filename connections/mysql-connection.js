@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 require("dotenv/config");
 
-const dbConnectionInfo = {
+const mysqlConnection = {
     host: "us-cdbr-east-02.cleardb.com",
     user: "b085f4726117c1",
     password: process.env.HEROKU_MYSQL_PASSWORD,
@@ -9,23 +9,13 @@ const dbConnectionInfo = {
     multipleStatements: true
 }
 
-var mysqlConnection = mysql.createPool(
-    dbConnectionInfo
-); 
-
-// Attempt to catch disconnects 
-mysqlConnection.on('connection', function (connection) {
-
-    console.log('Database Connection established');
-  
-    connection.on('error', function (err) {
-      console.error(new Date(), 'MySQL error', err.code);
-    });
-
-    connection.on('close', function (err) {
-      console.error(new Date(), 'MySQL close', err);
-    });
-  
+mysqlConnection.connect(function(err){
+  if(err){
+      console.log(err);
+  }
+  else{
+      console.log("You are now connected to the nyc MySQL database!");
+  }
 });
 
 module.exports = mysqlConnection;
