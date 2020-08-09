@@ -89,7 +89,7 @@ function getData() {
     console.log(campaign);
     console.log(attribute);
     console.log(date);
-    console.log(campType);
+    console.log(campType); 
 
     $.get("https://politiker-web-app.herokuapp.com/Politiker/home/graph", { campaign: campaign, 
                                                           campType: campType,

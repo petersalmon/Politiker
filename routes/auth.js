@@ -46,7 +46,7 @@ router.post("/register",function(req,res){
                 req.flash('error', err.message);
             }
             return res.render("register", {flashMsg: req.flash('error'), flashType: 'danger' });
-        }
+        } 
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,

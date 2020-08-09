@@ -110,7 +110,7 @@ router.get("/graph", isLoggedIn, function(req,res){
     
                 res.send(data);
             }
-        });
+        }); 
     }
     // for bar graph
     else{
