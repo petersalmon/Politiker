@@ -99,7 +99,9 @@ $(document).ready(function(){
         var scriptContent = $(".script-vals-hidden[data-title='" + scriptTitle + "']").attr("data-content");
         var p = document.createElement('p'); 
         p.innerHTML = scriptContent;
+        p.setAttribute("class", "show-script");
         var scriptArea = document.getElementById("script-content");
+        $('.show-script').remove();
         scriptArea.appendChild(p);
     });
 });
