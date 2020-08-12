@@ -38,7 +38,7 @@ app.use(expressSession ({
     secret: "sessionEncoder-Decoder",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 900000 }
 }));
 
 app.use(flash());
@@ -85,4 +85,4 @@ app.get("*",function(req,res){
 
 // Listen to this port
 const PORT = process.env.PORT || 8000;
-app.listen(PORT); 
+app.listen(PORT);  
