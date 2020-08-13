@@ -52,8 +52,12 @@ router.post("/register",function(req,res){
             port: 465,
             secure: true,
             auth: {
-                user: process.env.GMAIL_USER, // this should be YOUR GMAIL account
-                pass: process.env.GMAIL_PASS // this should be your password
+                type: 'OAuth2',
+                user: process.env.GMAIL_USER, 
+                clientId: process.env.GMAIL_CLIENT_ID,
+                clientSecret: process.env.GMAIL_CLIENT_SECRET,
+                refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+                accessToken: process.env.GMAIL_ACCESS_TOKEN
             }
         });
         var mail = {
@@ -233,8 +237,12 @@ router.post("/password-reset",function(req,res,next){
                 port: 465,
                 secure: true,
                 auth: {
-                    user: process.env.GMAIL_USER, // this should be YOUR GMAIL account
-                    pass: process.env.GMAIL_PASS // this should be your password
+                    type: 'OAuth2',
+                    user: process.env.GMAIL_USER, 
+                    clientId: process.env.GMAIL_CLIENT_ID,
+                    clientSecret: process.env.GMAIL_CLIENT_SECRET,
+                    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+                    accessToken: process.env.GMAIL_ACCESS_TOKEN
                 }
             });
             var mail = {
@@ -315,8 +323,12 @@ router.post('/password-reset/:token', function(req, res) {
                 port: 465,
                 secure: true,
                 auth: {
-                    user: process.env.GMAIL_USER, // this should be YOUR GMAIL account
-                    pass: process.env.GMAIL_PASS // this should be your password
+                    type: 'OAuth2',
+                    user: process.env.GMAIL_USER, 
+                    clientId: process.env.GMAIL_CLIENT_ID,
+                    clientSecret: process.env.GMAIL_CLIENT_SECRET,
+                    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+                    accessToken: process.env.GMAIL_ACCESS_TOKEN
                 }
             });
             var mail = {
