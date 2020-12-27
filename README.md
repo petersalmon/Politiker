@@ -39,7 +39,7 @@ To use the application, simply head over to Politiker.com, sign up for an accoun
 
 The home page showcases the latest lists and campaigns created by members of your organization as well as a live tracker to help you visualize the number of voters you have contacted, the number of voters you have spoken to, and the breakdown of voters by support type for each campaign your team has created. 
 
-![](public/img/home_1.gif)
+![](public/img/home_1.png)
 
 ![](public/img/home_2.gif)
 
