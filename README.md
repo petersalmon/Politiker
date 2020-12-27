@@ -100,7 +100,9 @@ Have questions or need help using the platform? Reach out to our support team fo
 ![](public/img/contact.png)
 
 ## Credits 
+
 Product of Peter Salamon & Alex Petridis
 
 ## License: 
-The copying, alteration, and redistribution of this product, expecially for commerical uses, is expressley prohibited without the prior knowledge of the original creators specified in the 'Credits' section above.
+
+This project is under an Apache 2.0 license. For further detail, please refer to the [LICENSE.md](LICENSE.md) file. 
