@@ -1,4 +1,4 @@
-# Politiker
+# [Politiker](https://politiker-web-app.herokuapp.com/Politiker/login)
 ===============	
 
 ## Description
@@ -27,7 +27,7 @@ Here is a brief overview of the app's features and how to use them.
 
 ### Register/Login
 
-To use the application, simply head over to Politiker.com, sign up for an account, verify your email address, and log in!
+To use the application, simply head over to [Politiker.com](https://politiker-web-app.herokuapp.com/Politiker/login), sign up for an account, verify your email address, and log in!
 
 ![](public/img/register.png)
 
