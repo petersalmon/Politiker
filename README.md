@@ -1,4 +1,4 @@
-# [Politiker](https://politiker-web-app.herokuapp.com/Politiker/login)
+# Politiker
 ===============	
 
 ## Description
@@ -27,11 +27,11 @@ Here is a brief overview of the app's features and how to use them.
 
 ### Register/Login
 
-To use the application, simply head over to [Politiker.com](https://politiker-web-app.herokuapp.com/Politiker/login), sign up for an account, verify your email address, and log in!
+To use the application, simply head over to Politiker.com, sign up for an account, verify your email address, and log in!
 
 ![](public/img/register.png)
 
-![](public/img/confirm_email_.png)
+![](public/img/confirm_email.png)
 
 ![](public/img/login.png)
 
@@ -39,25 +39,41 @@ To use the application, simply head over to [Politiker.com](https://politiker-we
 
 The home page showcases the latest lists and campaigns created by members of your organization as well as a live tracker to help you visualize the number of voters you have contacted, the number of voters you have spoken to, and the breakdown of voters by support type for each campaign your team has created. 
 
-![](public/img/home.gif)
+![](public/img/home_1.gif)
+
+![](public/img/home_2.gif)
 
 ### Maps
 
 The maps page provides an easy to use interactive map to quickly segment voters based on geography and quickly obtain demographic insights about the communities your voters reside in.
 
-![](public/img/maps.gif)
+![](public/img/maps_1.gif)
+
+![](public/img/maps_2.gif)
 
 ### Lists
 
 The lists page is where you naarrow down the voters you want to contact based on geography, age, political affiliation, and more. Curate your lists to the goals of your voter outreach efforts.
 
-![](public/img/lists.gif)
+![](public/img/lists_1.gif)
+
+![](public/img/lists_2.gif)
+
+![](public/img/lists_3.gif)
+
+![](public/img/lists_4.gif)
 
 ### Campaigns
 
 The campaigns page is where you manage your campaigns. Here, you will find a voter list, scripts, and voter information all on a single dashboard, making it easy for volunteers to contact voters and keep track of likely supporters.
 
-![](public/img/campaigns.gif)
+![](public/img/campaigns_1.gif)
+
+![](public/img/campaigns_2.gif)
+
+![](public/img/campaigns_3.gif)
+
+![](public/img/campaigns_4.gif)
 
 ### Scripts
 
