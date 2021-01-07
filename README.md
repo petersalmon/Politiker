@@ -2,7 +2,7 @@
 ===============	
 
 ## Description
-A full stack, web-based campaign management and analytics platform.
+A full-stack, web-based campaign management and analytics platform.
 
 ## Tech Stack
 * Backend consists of 
